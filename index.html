@@ -694,21 +694,16 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const quizId = urlParams.get('quiz');
                 const embedMode = urlParams.get('mode');
+                const encodedData = urlParams.get('data');
                 
-                if (embedMode === 'player' && quizId) {
+                // Player-only mode: If mode=player OR if data parameter exists
+                if (embedMode === 'player' || encodedData) {
                     // Player-only mode for embedding (no auth needed)
                     setPlayerOnly(true);
                     setMode('player');
                     
-                    // Load quiz from localStorage
-                    const saved = localStorage.getItem('quizzes');
-                    if (saved) {
-                        const quizzes = JSON.parse(saved);
-                        const foundQuiz = quizzes.find(q => q.id === quizId);
-                        if (foundQuiz) {
-                            setCurrentQuiz(foundQuiz);
-                        }
-                    }
+                    // Quiz will be loaded by QuizPlayer component
+                    // No need to load from localStorage here
                 } else {
                     // Admin mode - check authentication
                     const savedPassword = localStorage.getItem('admin_password');
